@@ -1,0 +1,230 @@
+C51 COMPILER V9.60.7.0   FUNCTION                                                          09/07/2023 22:52:35 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE FUNCTION
+OBJECT MODULE PLACED IN .\Objects\function.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE function.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
+                    -function.lst) TABS(2) OBJECT(.\Objects\function.obj)
+
+line level    source
+
+   1          //Functions required to test the IC
+   2          
+   3          #include<reg51.h>
+   4          #include<header.h>
+   5          sbit p1_0=P1^0; // input and output ports
+   6          sbit p1_1=P1^1;
+   7          sbit p1_2=P1^2;
+   8          sbit p1_3=P1^3;
+   9          sbit p1_4=P1^4;
+  10          sbit p1_5=P1^5;
+  11          sbit p1_6=P1^6;
+  12          sbit p1_7=P1^7;
+  13          sbit p2_0=P2^0;
+  14          sbit p2_1=P2^1;
+  15          sbit p2_2=P2^2;
+  16          sbit p2_3=P2^3;
+  17          unsigned char g1=0;     //gate status
+  18          unsigned char g2=0;
+  19          unsigned char g3=0;
+  20          unsigned char g4=0;
+  21          unsigned char g5=0;
+  22          unsigned char g6=0;
+  23          unsigned int i,j,k;
+  24          void sbit_0(){
+  25   1        p1_0=p1_1=p1_2=p1_3=p1_4=p1_5=p1_6=p1_7=0;
+  26   1        p2_0=p2_1=p2_2=p2_3=0;
+  27   1      
+  28   1      }
+  29          
+  30          void gate0(){
+  31   1        g1=g2=g3=g4=g5=g6=0;
+  32   1      }
+  33          
+  34          void not_7404()
+  35            {
+  36   1        gate0();
+  37   1        for(i=0;i<=1;i++){
+  38   2          sbit_0();
+  39   2          p1_0=p1_2=p1_4=p1_7=p2_1=p2_3=i;
+  40   2          p1_1=p1_3=p1_5=p1_6=p2_0=p2_2=1;
+  41   2          delay(10);
+  42   2          g1 += (p1_1 != p1_0);
+  43   2          g2 += (p1_3 != p1_2);
+  44   2          g3 += (p1_5 != p1_4);
+  45   2          g4 += (p1_6 != p1_7);
+  46   2          g5 += (p2_0 != p2_1);
+  47   2          g6 += (p2_2 != p2_3);
+  48   2        }
+  49   1        output(6);
+  50   1      }
+  51           void and_7408(void){
+  52   1         gate0();
+  53   1         clear_line2();
+  54   1         
+C51 COMPILER V9.60.7.0   FUNCTION                                                          09/07/2023 22:52:35 PAGE 2   
+
+  55   1         for(i=0;i<=1;i++){
+  56   2           sbit_0();
+  57   2           p1_0=p1_3=p2_0=p2_3=i;
+  58   2           for(j=0;j<=1;j++){ 
+  59   3             p1_1=p1_4=p1_7=p2_2=j;
+  60   3             p1_2=p1_5=p1_6=p2_1=1;
+  61   3             delay(10);      
+  62   3             if (p1_2 == (p1_0 & p1_1)) g1++;
+  63   3             if (p1_5 == (p1_3 & p1_4)) g2++;
+  64   3             if (p1_6 == (p2_0 & p1_7)) g3++;
+  65   3             if (p2_1 == (p2_3 & p2_2)) g4++;
+  66   3           } 
+  67   2             }
+  68   1      output(4);
+  69   1       }
+  70           void nand_7400(){
+  71   1         gate0();
+  72   1         for(i=0;i<=1;i++){
+  73   2           for(j=0;j<=1;j++){
+  74   3             sbit_0();
+  75   3             p1_0=p1_3=p2_0=p2_3=i;
+  76   3             p1_1=p1_4=p1_7=p2_2=j;
+  77   3             p1_2=p1_5=p1_6=p2_1=1;
+  78   3             delay(10);
+  79   3             
+  80   3             if(p1_2 !=(p1_0&p1_1)){       //not equal to A&B
+  81   4               g1++;}
+  82   3             if(p1_5 !=(p1_3&p1_4)){
+  83   4               g2++;} 
+  84   3             if(p1_6 !=(p2_0&p1_7)){
+  85   4               g3++;} 
+  86   3             if(p2_1 !=(p2_3&p2_2)){
+  87   4               g4++;} 
+  88   3             }
+  89   2           }
+  90   1         output(4);
+  91   1         }
+  92           void nor_7402(){
+  93   1         gate0();
+  94   1         for(i=0;i<=1;i++){
+  95   2           for(j=0;j<=1;j++){
+  96   3             sbit_0();
+  97   3             p1_1=p1_4=p1_7=p2_2=i;
+  98   3             p1_2=p1_5=p1_6=p2_1=j;
+  99   3             p1_0=p1_3=p2_0=p2_3=1;
+ 100   3             delay(10);
+ 101   3             if(p1_0 !=(p1_1|p1_2)){       //not equal to A|B
+ 102   4               g1++;}
+ 103   3             if(p1_3 !=(p1_5|p1_4)){
+ 104   4               g2++;} 
+ 105   3             if(p2_0 !=(p1_6|p1_7)){
+ 106   4               g3++;} 
+ 107   3             if(p2_3 !=(p2_1|p2_2)){
+ 108   4               g4++;} 
+ 109   3             }
+ 110   2           }
+ 111   1         output(4);
+ 112   1         }
+ 113          void or_7432(){
+ 114   1        gate0();
+ 115   1         for(i=0;i<=1;i++){
+ 116   2           for(j=0;j<=1;j++){
+C51 COMPILER V9.60.7.0   FUNCTION                                                          09/07/2023 22:52:35 PAGE 3   
+
+ 117   3             sbit_0();
+ 118   3             p1_0=p1_3=p2_0=p2_3=i;
+ 119   3             p1_1=p1_4=p1_7=p2_2=j;
+ 120   3             p1_2=p1_5=p1_6=p2_1=1;
+ 121   3             delay(10);
+ 122   3             
+ 123   3             if(p1_2 ==(p1_0|p1_1)){       
+ 124   4               g1++;}
+ 125   3             if(p1_5 ==(p1_3|p1_4)){
+ 126   4               g2++;} 
+ 127   3             if(p1_6 ==(p2_0|p1_7)){
+ 128   4               g3++;} 
+ 129   3             if(p2_1 ==(p2_3|p2_2)){
+ 130   4               g4++;} 
+ 131   3             }
+ 132   2           }
+ 133   1         output(4);
+ 134   1         }
+ 135          
+ 136          void xor_7486(){
+ 137   1          gate0();
+ 138   1         for(i=0;i<=1;i++){
+ 139   2           for(j=0;j<=1;j++){
+ 140   3             sbit_0();
+ 141   3             p1_0=p1_3=p2_0=p2_3=i;
+ 142   3             p1_1=p1_4=p1_7=p2_2=j;
+ 143   3             p1_2=p1_5=p1_6=p2_1=1;
+ 144   3             delay(10);
+ 145   3             
+ 146   3             if(p1_2 ==(p1_0^p1_1)){      
+ 147   4               g1++;}
+ 148   3             if(p1_5 ==(p1_3^p1_4)){
+ 149   4               g2++;} 
+ 150   3             if(p1_6 ==(p2_0^p1_7)){
+ 151   4               g3++;} 
+ 152   3             if(p2_1 ==(p2_3^p2_2)){
+ 153   4               g4++;} 
+ 154   3             }
+ 155   2           }
+ 156   1         output(4);
+ 157   1         }
+ 158             
+ 159          void output(int out_num){
+ 160   1        clear_line2();
+ 161   1        switch(out_num)
+ 162   1        {
+ 163   2          case 4:
+ 164   2            if(g1==4 & g2==4 & g3==4 & g4==4){
+ 165   3               LCD_String("1 2 3 4 GOOD");
+ 166   3               break;
+ 167   3            }
+ 168   2            if(g1!=4 & g2!=4 & g3!=4 & g4!=4){
+ 169   3               LCD_String("IC IS BAD");
+ 170   3            }
+ 171   2            else {
+ 172   3            if(g1==4) LCD_String("1 ");
+ 173   3            if(g2==4) LCD_String("2 ");
+ 174   3            if(g3==4) LCD_String("3 ");
+ 175   3            if(g4==4) LCD_String("4 ");
+ 176   3            LCD_String("GOOD");
+ 177   3            }
+ 178   2            break;
+C51 COMPILER V9.60.7.0   FUNCTION                                                          09/07/2023 22:52:35 PAGE 4   
+
+ 179   2          case 6:
+ 180   2            if(g1==2 & g2==2 & g3==2 & g4==2 & g5==2 & g6==2){
+ 181   3               LCD_String("1 2 3 4 5 6 GOOD");
+ 182   3               break;
+ 183   3            }
+ 184   2            if(g1!=2 & g2!=2 & g3!=2 & g4!=2 & g5!=2 & g6!=2){
+ 185   3               LCD_String("IC IS BAD");
+ 186   3            }
+ 187   2            else{
+ 188   3            if(g1==2) LCD_String("1 ");
+ 189   3            if(g2==2) LCD_String("2 ");
+ 190   3            if(g3==2) LCD_String("3 ");
+ 191   3            if(g4==2) LCD_String("4 ");
+ 192   3            if(g5==2) LCD_String("5 ");
+ 193   3            if(g6==2) LCD_String("6 ");
+ 194   3            LCD_String("GOOD");
+ 195   3            break;
+ 196   3            }
+ 197   2          default:
+ 198   2            break;
+ 199   2        }
+ 200   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1500    ----
+   CONSTANT SIZE    =     63    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     12       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

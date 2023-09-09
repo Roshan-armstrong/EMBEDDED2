@@ -1,0 +1,116 @@
+C51 COMPILER V9.60.7.0   LCD                                                               09/07/2023 22:52:35 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE LCD
+OBJECT MODULE PLACED IN .\Objects\lcd.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE lcd.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\lcd.l
+                    -st) TABS(2) OBJECT(.\Objects\lcd.obj)
+
+line level    source
+
+   1          //Functions required to display the output in 16x2 display
+   2          
+   3          #include<reg51.h>
+   4          #include<header.h>
+   5          sfr LCD_Port=0x80;  
+   6          sbit rs=P0^0;     /* Register select pin */
+   7          sbit rw=P0^1;     /* Read/Write pin */
+   8          sbit en=P0^2; 
+   9          
+  10          code const unsigned char myString[6][5] = {
+  11              {"7400"},
+  12              {"7402"},
+  13              {"7404"},
+  14              {"7408"},
+  15              {"7432"},
+  16              {"7486"},
+  17            };
+  18          
+  19          void delay(unsigned int count)        
+  20          {int i,j;
+  21   1           for(i=0;i<count;i++){
+  22   2             for(j=0;j<1120;j++);
+  23   2      }}
+  24          
+  25          void string(){
+  26   1        LCD_Command(0x01);
+  27   1        LCD_String("IC_");
+  28   1        LCD_String(myString[currentP]);
+  29   1      }
+  30          
+  31          void clear_line2()
+  32          {
+  33   1        LCD_Command(0x01);
+  34   1        string();
+  35   1        LCD_Command(0xC0);
+  36   1      }
+  37          
+  38          void LCD_Command (char cmnd)  /* LCD16x2 command funtion */
+  39          {
+  40   1        LCD_Port =(LCD_Port & 0x0F) | (cmnd & 0xF0);/* Send upper nibble */
+  41   1        rs=0;     /* Command reg. */
+  42   1        rw=0;     /* Write operation */
+  43   1        en=1; 
+  44   1        delay(1);
+  45   1        en=0;
+  46   1        delay(2);
+  47   1        
+  48   1        LCD_Port = (LCD_Port & 0x0F) | (cmnd << 4);/* Send lower nibble */
+  49   1        en=1;     /* Enable pulse */
+  50   1        delay(1);
+  51   1        en=0;
+  52   1        delay(5);
+  53   1      }
+  54          
+C51 COMPILER V9.60.7.0   LCD                                                               09/07/2023 22:52:35 PAGE 2   
+
+  55          void LCD_Char (char char_data)  /* LCD data write function */
+  56          {
+  57   1        LCD_Port =(LCD_Port & 0x0F) | (char_data & 0xF0);/* Send upper nibble */
+  58   1        rs=1;       /*Data reg.*/
+  59   1        rw=0;       /*Write operation*/
+  60   1        en=1;  
+  61   1        delay(1);
+  62   1        en=0;
+  63   1        delay(2);
+  64   1      
+  65   1        LCD_Port = (LCD_Port & 0x0F) | (char_data << 4);/* Send lower nibble */
+  66   1        en=1;       /* Enable pulse */
+  67   1        delay(1);
+  68   1        en=0;
+  69   1        delay(5);
+  70   1      
+  71   1      }
+  72          
+  73          void LCD_String (char *str) /* Send string to LCD function */
+  74          {int i;
+  75   1        for(i=0;str[i]!=0;i++)  /* Send each char of string till the NULL */
+  76   1        {
+  77   2          LCD_Char (str[i]);  /* Call LCD data write */
+  78   2        }
+  79   1      }
+  80          
+  81          void LCD_Init (void)    /* LCD Initialize function */
+  82          {
+  83   1        delay(20);    /* LCD Power ON Initialization time >15ms */
+  84   1        LCD_Command (0x02); /* 4bit mode */
+  85   1        LCD_Command (0x28); /* Initialization of 16X2 LCD in 4bit mode */
+  86   1        LCD_Command (0x0C); /* Display ON Cursor OFF */
+  87   1        LCD_Command (0x06); /* Auto Increment cursor */
+  88   1        LCD_Command (0x01); /* clear display */
+  89   1        LCD_Command (0x80); /* cursor at first line */
+  90   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    246    ----
+   CONSTANT SIZE    =     34    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       5
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

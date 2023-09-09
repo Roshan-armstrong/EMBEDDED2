@@ -1,0 +1,84 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              09/07/2023 22:52:35 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main
+                    -.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          //Programmer : ROSHAN NT
+   2          //AIM : To test every single logic gate in a IC and display the output
+   3          
+   4          #include<reg51.h>
+   5          #include<header.h>
+   6          sbit up=P2^4;
+   7          sbit down=P2^5;
+   8          sbit test=P2^6;
+   9          void up_fn(void);
+  10          void down_fn(void);
+  11          unsigned int currentP=0;
+  12          unsigned int stringS=6;
+  13          void main()
+  14          {
+  15   1        up=1;
+  16   1        down=1;
+  17   1        test=1;
+  18   1        LCD_Init(); 
+  19   1        string(); // Increment cursor position, no shift
+  20   1        gate0();
+  21   1        while(1){
+  22   2          sbit_0();
+  23   2          if(up==0){    //only increment the ic number
+  24   3            currentP=(currentP+1)%stringS;
+  25   3            string();
+  26   3          }
+  27   2          if(down==0){   //only decrement the ic number
+  28   3              clear_line2();
+  29   3            currentP=(currentP-1)%stringS;
+  30   3          }
+  31   2          
+  32   2        
+  33   2          if(test==0){
+  34   3            switch (currentP)
+  35   3            {
+  36   4              case 0:
+  37   4              nand_7400();
+  38   4              break;
+  39   4              case 1:
+  40   4                nor_7402();
+  41   4                break;
+  42   4              case 2:
+  43   4                not_7404();
+  44   4                break;
+  45   4              case 3:
+  46   4                and_7408();
+  47   4                break;
+  48   4              case 4:
+  49   4                or_7432();
+  50   4                break;
+  51   4              case 5:
+  52   4                xor_7486();
+  53   4                break;
+  54   4              default:
+C51 COMPILER V9.60.7.0   MAIN                                                              09/07/2023 22:52:35 PAGE 2   
+
+  55   4                break;}
+  56   3            }
+  57   2      }
+  58   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    129    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,7 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\function.obj",
+".\Objects\lcd.obj" 
+TO ".\Objects\Logic IC Tester using  8052" 
+PRINT(".\Listings\Logic IC Tester using  8052.m51") RAMSIZE(256) 
+CODE( 0X0000-0X1FFF )
